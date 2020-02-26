@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+	
+	<select id="getPk" resultType="long">
+	<![CDATA[
+		SELECT seq_users_no.nextval FROM dual
+	]]>
+	</select>
+	
+	<insert id="insert" parameterType="UserVo">
+	<![CDATA[
+	INSERT INTO users
+	(userNo, userName, id, password, joinDate)
+	VALUES(
+	#{userNo}, #{userName}, #{id}, #{password}, sysdate
+	)
+	]]>
+	</insert>
+	
+	
+	
+	<select id="selectById" parameterType="string" resultType="UserVo">
+	<![CDATA[
+	SELECT userNo, userName, id, joinDate
+	FROM users
+	WHERE id=#{id}
+	]]>
+	</select>
+	
+	<select id="selectByIdAndPassword" parameterType = "map" resultType = "UserVo">
+	<![CDATA[
+	SELECT userNo, userName, id, joinDate
+	FROM users
+	WHERE id=#{id} AND password=#{password}
+	]]>
+	</select>
+	
+	<insert id="party" parameterType="UserVo">
+	<![CDATA[
+	INSERT INTO blog
+	(userNo, blogTitle)
+	VALUES(
+	#{userNo}, #{userName} 
+	)
+	]]>	
+	</insert>
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
+	
+	<context:annotation-config />
+	<context:component-scan base-package="com.bitacademy.jblog.repository com.bitacademy.jblog.service com.bitacademy.jblg.exception">
+	<context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+	<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+	<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
+	</context:component-scan>
+	
+	<!-- Data SOURCE(ORACLE) -->
+	<bean id="oracleDatasource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
+	<property name="URL" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+	<property name="user" value="jblog"/>
+	<property name="password" value="jblog"/>
+	<property name="connectionCachingEnabled" value="true"/>
+	</bean>
+	
+	<!-- MyBatis sqlsessionfactorybean -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<!-- datasource bean의 id를 참조로 넘갸줘야 한다 -->
+	<property name="dataSource" ref="oracleDatasource"/>
+	<!-- MyBatis 설정 파일의 위치 -->
+	<property name="configLocation" value="classpath:mybatis/configuration.xml"/>
+	</bean>
+	
+	<!-- MyBatis sqlSessionTemplate -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+	<!-- Bean 생성자 호출 -->
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+</beans>
